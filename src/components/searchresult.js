@@ -58,7 +58,7 @@ const SearchResults = ({ searchTerm }) => {
                                 alt={result.name}
                             />
                             <CardContent>
-                                <Link href={`/lyric?id=${result.id}`} passHref>
+                                <Link href={`/lyric/${result.id}`} passHref>
                                     <Typography variant="h6" component="a">
                                         {result.name} {/* 歌曲名称 */}
                                     </Typography>
