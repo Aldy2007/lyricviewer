@@ -1,0 +1,6 @@
+{
+  "/api/search/route": "app/api/search/route.js",
+  "/api/detail/route": "app/api/detail/route.js",
+  "/page": "app/page.js",
+  "/lyric/page": "app/lyric/page.js"
+}
