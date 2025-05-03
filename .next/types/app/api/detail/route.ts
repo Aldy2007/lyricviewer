@@ -1,4 +1,4 @@
-// File: /home/aldy2007/workspace/code-work/mui/src/app/api/detail/route.js
+// File: /home/aldy2007/workspace/code-work/lyrics/src/app/api/detail/route.js
 import * as entry from '../../../../../src/app/api/detail/route.js'
 import type { NextRequest } from 'next/server.js'
 
