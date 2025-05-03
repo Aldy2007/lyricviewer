@@ -1,4 +1,3 @@
-// app/lyric/page.js
 'use client';
 
 import * as React from 'react';
@@ -6,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Container, CircularProgress, Button } from '@mui/material';
 import Link from 'next/link';  // 导入 Link 组件
 import LyricDetail from '@/components/lyricdetail';
+import { Suspense } from 'react';
 
 export default function LyricPage() {
     const searchParams = useSearchParams();
@@ -38,7 +38,7 @@ export default function LyricPage() {
             }
         };
         fetchLyrics();
-    }, []); // 依赖数组为空，确保只在组件加载时执行一次
+    }, [id]); // 加入id作为依赖项，当id发生变化时重新请求歌词
 
     // 加载中状态
     if (loading) {
@@ -84,10 +84,12 @@ export default function LyricPage() {
                 </Button>
             </Link>
 
-            <LyricDetail
-                lyrics={lyricsData.lyric}
-                tlyrics={lyricsData.tlyric}
-            />
+            <Suspense fallback={<CircularProgress />}>
+                <LyricDetail
+                    lyrics={lyricsData.lyric}
+                    tlyrics={lyricsData.tlyric}
+                />
+            </Suspense>
         </Container>
     );
 }
