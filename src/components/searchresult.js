@@ -1,6 +1,7 @@
+
 import * as React from 'react';
 import Link from 'next/link';
-import { Grid, Card, CardContent, CardMedia, Typography, CircularProgress } from '@mui/material';
+import { List, ListItem, ListItemText, Typography, CircularProgress, Box } from '@mui/material';
 
 // 调用 Next.js 后端 API 获取搜索结果
 const fetchSearchResults = async (searchTerm) => {
@@ -35,44 +36,43 @@ const SearchResults = ({ searchTerm }) => {
 
     if (loading) {
         return (
-            <Grid container justifyContent="center" marginTop={2}>
+            <Box display="flex" justifyContent="center" marginTop={2}>
                 <CircularProgress />
-            </Grid>
+            </Box>
         );
     }
 
     return (
-        <Grid container spacing={4} marginTop={2} sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+        <Box marginTop={2}>
             {results.length === 0 ? (
                 <Typography variant="h6" color="textSecondary">
                     No results found.
                 </Typography>
             ) : (
-                results.map((result, index) => (
-                    <Grid item key={index} sx={{ flex: '1 0 21%', maxWidth: '21%', marginBottom: 4 }}> {/* 增加底部的间距 */}
-                        <Card>
-                            <CardMedia
-                                component="img"
-                                height="140"
-                                image={result.image || 'https://via.placeholder.com/150'} // 专辑图片
-                                alt={result.name}
-                            />
-                            <CardContent>
-                                <Link href={`/lyric/${result.id}`} passHref>
-                                    <Typography variant="h6" component="a">
-                                        {result.name} {/* 歌曲名称 */}
+                <List>
+                    {results.map((result, index) => (
+                        <ListItem key={index} divider>
+                            <ListItemText
+                                primary={
+                                    <Link href={`/lyric/${result.id}`} passHref>
+                                        <Typography variant="h6" component="a" sx={{ textDecoration: 'none', color: 'inherit' }}>
+                                            {result.name} {/* 歌曲名称 */}
+                                        </Typography>
+                                    </Link>
+                                }
+                                secondary={
+                                    <Typography variant="body2" color="textSecondary">
+                                        {result.artists} {/* 歌手 */}
                                     </Typography>
-                                </Link>
-                                <Typography variant="body2" color="textSecondary">
-                                    {result.artists} {/* 歌手 */}
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))
+                                }
+                            />
+                        </ListItem>
+                    ))}
+                </List>
             )}
-        </Grid>
+        </Box>
     );
 };
 
 export default SearchResults;
+

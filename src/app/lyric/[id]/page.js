@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -6,15 +7,15 @@ import Link from 'next/link';
 import LyricDetail from '@/components/lyricdetail';
 
 export default function LyricPage({ params }) {
-    // 解包 params
-    const { id } = React.use(params);
+    const { id } = params; // 直接解构 params
     const [lyricsData, setLyricsData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
 
     // 当 id 存在时请求歌词数据
     React.useEffect(() => {
         if (!id) {
-            return;  // 如果没有 id，停止请求
+            setLoading(false);
+            return; // 如果没有 id，停止请求
         }
 
         const fetchLyrics = async () => {
@@ -33,6 +34,7 @@ export default function LyricPage({ params }) {
                 setLoading(false);
             } catch (error) {
                 console.error('Error:', error);
+                setLyricsData(null);
                 setLoading(false);
             }
         };
@@ -59,7 +61,7 @@ export default function LyricPage({ params }) {
     }
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center', position: 'relative' }}>
+        <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center', position: 'relative', '@media print': { display: 'block', mt: 0 } }}>
             {/* 返回按钮 */}
             <Link href="/" passHref>
                 <Button
@@ -78,11 +80,36 @@ export default function LyricPage({ params }) {
                         justifyContent: 'center',
                         alignItems: 'center',
                         zIndex: 10,
+                        '@media print': { display: 'none' },
                     }}
                 >
                     <span style={{ fontSize: '20px', color: 'white' }}>←</span>
                 </Button>
             </Link>
+
+            {/* 打印按钮 */}
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => window.print()}
+                sx={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    padding: 0,
+                    minWidth: 'auto',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    zIndex: 10,
+                    '@media print': { display: 'none' },
+                }}
+            >
+                <span style={{ fontSize: '20px', color: 'white' }}>🖨️</span>
+            </Button>
 
             <LyricDetail
                 lyrics={lyricsData.lyric}
@@ -91,3 +118,4 @@ export default function LyricPage({ params }) {
         </Container>
     );
 }
+
