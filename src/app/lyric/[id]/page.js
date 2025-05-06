@@ -7,7 +7,7 @@ import Link from 'next/link';
 import LyricDetail from '@/components/lyricdetail';
 
 export default function LyricPage({ params }) {
-    const { id } = params; // 直接解构 params
+    const { id } = React.use(params); // 直接解构 params
     const [lyricsData, setLyricsData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
 
@@ -62,55 +62,6 @@ export default function LyricPage({ params }) {
 
     return (
         <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center', position: 'relative', '@media print': { display: 'block', mt: 0 } }}>
-            {/* 返回按钮 */}
-            <Link href="/" passHref>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                        position: 'absolute',
-                        top: '20px',
-                        left: '20px',
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '50%',
-                        padding: 0,
-                        minWidth: 'auto',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        zIndex: 10,
-                        '@media print': { display: 'none' },
-                    }}
-                >
-                    <span style={{ fontSize: '20px', color: 'white' }}>←</span>
-                </Button>
-            </Link>
-
-            {/* 打印按钮 */}
-            <Button
-                variant="contained"
-                color="secondary"
-                onClick={() => window.print()}
-                sx={{
-                    position: 'absolute',
-                    top: '20px',
-                    right: '20px',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    padding: 0,
-                    minWidth: 'auto',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 10,
-                    '@media print': { display: 'none' },
-                }}
-            >
-                <span style={{ fontSize: '20px', color: 'white' }}>🖨️</span>
-            </Button>
-
             <LyricDetail
                 lyrics={lyricsData.lyric}
                 tlyrics={lyricsData.tlyric}
