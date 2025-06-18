@@ -1,42 +1,29 @@
 'use client';
 import * as React from 'react';
 import Container from '@mui/material/Container';
-import { TextField,  Box } from '@mui/material';
-import SearchResults from '@/components/searchresult';
+import { Box } from '@mui/material';
+import ToolCard from '@/components/toolcard';
 
 export default function Home() {
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = React.useState('');
-
-  React.useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500); // 延迟 500ms
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchTerm]);
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
   return (
-    <Box>
-      {/* 顶栏 */}
-      
-
-      <Container maxWidth="md" sx={{ marginTop: 4 }}>
-        <TextField
-          id="SongInfo"
-          label="Search"
-          placeholder="Name / Singer"
-          fullWidth
-          margin="normal"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <SearchResults searchTerm={debouncedSearchTerm} />
+    <Box sx={{
+      display: 'flex',
+      minHeight: '100vh',
+      alignItems: 'center',
+      justifyContent: 'center',
+      py: 4
+    }}>
+      <Container maxWidth="sm">
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <ToolCard 
+            title="歌词查看"
+            link="/tools/lyrics"
+          />
+          <ToolCard 
+            title="邮件查看"
+            link="/tools/email"
+          />
+        </Box>
       </Container>
     </Box>
   );

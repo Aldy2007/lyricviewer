@@ -6,7 +6,7 @@ import { List, ListItem, ListItemText, Typography, CircularProgress, Box } from 
 // 调用 Next.js 后端 API 获取搜索结果
 const fetchSearchResults = async (searchTerm) => {
     if (!searchTerm) return [];
-    const res = await fetch(`/api/search?keywords=${searchTerm}`); // 调用本地的 API 路由
+    const res = await fetch(`/api/tools/lyrics/search?keywords=${searchTerm}`);
     const data = await res.json();
     return data.results || [];
 };

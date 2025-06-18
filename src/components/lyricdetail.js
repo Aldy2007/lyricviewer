@@ -1,17 +1,18 @@
-
 'use client';
 
 import * as React from 'react';
 import { Container, Paper, Typography, Box, Slider, Button, Grid, Select, MenuItem } from '@mui/material';
 
-export default function LyricDetail({ lyrics, tlyrics, artist }) {
+export default function LyricDetail({ lyrics, tlyrics, artist, romalyrics }) {
     // 将歌词按行分割
     const lyricLines = lyrics ? lyrics.split('\n') : [];
     const tlyricLines = tlyrics ? tlyrics.split('\n') : [];
+    const romalyrLines = romalyrics ? romalyrics.split('\n') : [];
     const [fontSize, setFontSize] = React.useState(12); // 默认字体大小为 12pt
     const [color, setColor] = React.useState('#000000'); // 默认颜色为黑色
     const [lineHeight, setLineHeight] = React.useState(1.6); // 默认行间距为 1.6
     const [columnGap, setColumnGap] = React.useState(10); // 默认列间距为 10px
+    const [showTranslation, setShowTranslation] = React.useState(true); // 默认显示翻译
 
     // 处理字体大小滑动框变化
     const handleFontSizeChange = (event, newValue) => {
@@ -45,6 +46,11 @@ export default function LyricDetail({ lyrics, tlyrics, artist }) {
         { value: '#0000FF', label: '蓝色' },
         { value: '#008000', label: '绿色' },
     ];
+
+    // 切换显示翻译或罗马音
+    const handleToggleLyrics = () => {
+        setShowTranslation(!showTranslation);
+    };
 
     return (
         <Container maxWidth="md" sx={{ mt: 4, '@media print': { mt: 0 } }}>
@@ -112,6 +118,15 @@ export default function LyricDetail({ lyrics, tlyrics, artist }) {
                 </Container>
             </Paper>
 
+            {/* 按钮切换翻译和罗马音 */}
+            {(tlyrics || romalyrics) && (
+                <Box sx={{ textAlign: 'center', mb: 3, '@media print': { display: 'none' } }}>
+                    <Button variant="outlined" onClick={handleToggleLyrics}>
+                        {showTranslation ? '显示罗马音' : '显示翻译'}
+                    </Button>
+                </Box>
+            )}
+
             <Paper sx={{ padding: 3, backgroundColor: '#f5f5f5', '@media print': { boxShadow: 'none', padding: 0, backgroundColor: '#fff' } }}>
                 <Box sx={{ textAlign: 'center', mb: 3, '@media print': { display: 'none' } }}>
                     <Typography variant="h6" component="h2" color="textSecondary" gutterBottom>
@@ -127,9 +142,14 @@ export default function LyricDetail({ lyrics, tlyrics, artist }) {
                                 <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: color, '@media print': { flex: 1, lineHeight: lineHeight, fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
                                     {line}
                                 </Typography>
-                                {tlyricLines[index] && (
+                                {(showTranslation && tlyricLines[index]) && (
                                     <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: 'textSecondary', '@media print': { flex: 1, lineHeight: lineHeight, color: '#555', fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
                                         {tlyricLines[index]}
+                                    </Typography>
+                                )}
+                                {(!showTranslation && romalyrLines[index]) && (
+                                    <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: 'textSecondary', '@media print': { flex: 1, lineHeight: lineHeight, color: '#555', fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
+                                        {romalyrLines[index]}
                                     </Typography>
                                 )}
                             </Box>
@@ -144,4 +164,3 @@ export default function LyricDetail({ lyrics, tlyrics, artist }) {
         </Container>
     );
 }
-

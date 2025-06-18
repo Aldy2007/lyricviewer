@@ -21,7 +21,7 @@ export default function LyricPage({ params }) {
         const fetchLyrics = async () => {
             setLoading(true); // 启动加载
             try {
-                const res = await fetch(`/api/detail?id=${id}`);
+                const res = await fetch(`/api/LyricDetail?id=${id}`);
                 if (!res.ok) {
                     console.error('Error fetching lyrics:', res.status);
                     setLyricsData(null);
@@ -65,6 +65,7 @@ export default function LyricPage({ params }) {
             <LyricDetail
                 lyrics={lyricsData.lyric}
                 tlyrics={lyricsData.tlyric}
+                romalyrics={lyricsData.romalrc}
             />
         </Container>
     );
