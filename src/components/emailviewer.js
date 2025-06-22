@@ -39,7 +39,7 @@ export default function EmailViewer() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`https://api.vercel.aldyh.top/mail/recent_emails?password=${password}`);
+      const response = await fetch(`/api/tools/email/list?password=${password}`);
       const data = await response.json();
       if (data.status === 'success') {
         setEmails(data.emails);
@@ -64,12 +64,31 @@ export default function EmailViewer() {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`https://api.vercel.aldyh.top/mail/fetch?id=${id}&password=${password}`);
+      const response = await fetch(`/api/tools/email/detail?id=${id}&password=${password}`);
       const data = await response.json();
       if (data.status === 'success') {
         setSelectedEmail(data.message);
       } else {
         setError('获取邮件详情失败');
+      }
+    } catch (err) {
+      setError('网络错误');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 刷新邮件列表
+  const refreshEmails = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch(`/api/tools/email/refresh?password=${password}`);
+      const data = await response.json();
+      if (data.status === 'success') {
+        setEmails(data.emails);
+      } else {
+        setError('刷新失败');
       }
     } catch (err) {
       setError('网络错误');
@@ -93,35 +112,47 @@ export default function EmailViewer() {
   };
 
   const renderEmailList = () => (
-    <List>
-      {emails.map((email) => (
-        <React.Fragment key={email['#']}>
-          <ListItem 
-            button 
-            onClick={() => fetchEmailDetail(email['#'])}
-            sx={{
-              '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.04)',
-              }
-            }}
-          >
-            <ListItemText
-              primary={email.subject}
-              secondary={
-                <React.Fragment>
-                  <Typography component="span" variant="body2" color="text.primary">
-                    {email.from}
-                  </Typography>
-                  <br />
-                  {formatDate(email.date)}
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-          <Divider />
-        </React.Fragment>
-      ))}
-    </List>
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+        <Button 
+          variant="outlined" 
+          size="small" 
+          onClick={refreshEmails}
+          disabled={loading}
+        >
+          刷新
+        </Button>
+      </Box>
+      <List>
+        {emails.map((email) => (
+          <React.Fragment key={email['#']}>
+            <ListItem 
+              button 
+              onClick={() => fetchEmailDetail(email['#'])}
+              sx={{
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                }
+              }}
+            >
+              <ListItemText
+                primary={email.subject}
+                secondary={
+                  <React.Fragment>
+                    <Typography component="span" variant="body2" color="text.primary">
+                      {email.from}
+                    </Typography>
+                    <br />
+                    {formatDate(email.date)}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+            <Divider />
+          </React.Fragment>
+        ))}
+      </List>
+    </Box>
   );
 
   const renderEmailDetail = () => (
