@@ -23,6 +23,10 @@ export default function Home() {
             title="邮件查看"
             link="/tools/email"
           />
+          <ToolCard
+            title="图床"
+            link="/tools/upload"
+          />
         </Box>
       </Container>
     </Box>
