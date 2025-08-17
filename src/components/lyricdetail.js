@@ -4,14 +4,11 @@ import * as React from 'react';
 import { Container, Paper, Typography, Box, Slider, Button, Grid, Select, MenuItem } from '@mui/material';
 
 export default function LyricDetail({ lyrics, tlyrics, artist, romalyrics }) {
-    // 将歌词按行分割
-    const lyricLines = lyrics ? lyrics.split('\n') : [];
-    const tlyricLines = tlyrics ? tlyrics.split('\n') : [];
-    const romalyrLines = romalyrics ? romalyrics.split('\n') : [];
+    // 状态管理
     const [fontSize, setFontSize] = React.useState(12); // 默认字体大小为 12pt
     const [color, setColor] = React.useState('#000000'); // 默认颜色为黑色
     const [lineHeight, setLineHeight] = React.useState(1.6); // 默认行间距为 1.6
-    const [columnGap, setColumnGap] = React.useState(10); // 默认列间距为 10px
+    const [columnGap, setColumnGap] = React.useState(10); // 仅用于打印样式，可忽略
     const [showTranslation, setShowTranslation] = React.useState(true); // 默认显示翻译
 
     // 处理字体大小滑动框变化
@@ -128,37 +125,61 @@ export default function LyricDetail({ lyrics, tlyrics, artist, romalyrics }) {
             )}
 
             <Paper sx={{ padding: 3, backgroundColor: '#f5f5f5', '@media print': { boxShadow: 'none', padding: 0, backgroundColor: '#fff' } }}>
+                {/* 歌手信息 */}
                 <Box sx={{ textAlign: 'center', mb: 3, '@media print': { display: 'none' } }}>
                     <Typography variant="h6" component="h2" color="textSecondary" gutterBottom>
                         {artist}
                     </Typography>
                 </Box>
 
-                {/* 检查是否有歌词 */}
-                <Box sx={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', '@media print': { 'font-size': `${fontSize}pt`, color: color } }}>
-                    {lyricLines.length > 0 ? (
-                        lyricLines.map((line, index) => (
-                            <Box key={index} sx={{ display: 'flex', flexDirection: 'row', mb: 1, gap: `${columnGap}px`, '@media print': { display: 'flex', flexDirection: 'row', mb: 0.5, gap: `${columnGap}px`, alignItems: 'baseline' } }}>
-                                <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: color, '@media print': { flex: 1, lineHeight: lineHeight, fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
-                                    {line}
-                                </Typography>
-                                {(showTranslation && tlyricLines[index]) && (
-                                    <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: 'textSecondary', '@media print': { flex: 1, lineHeight: lineHeight, color: '#555', fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
-                                        {tlyricLines[index]}
-                                    </Typography>
-                                )}
-                                {(!showTranslation && romalyrLines[index]) && (
-                                    <Typography variant="body1" component="span" sx={{ flex: 1, fontSize: `${fontSize}pt`, lineHeight: lineHeight, color: 'textSecondary', '@media print': { flex: 1, lineHeight: lineHeight, color: '#555', fontFamily: '"Noto Sans CJK SC", sans-serif' } }}>
-                                        {romalyrLines[index]}
-                                    </Typography>
-                                )}
-                            </Box>
-                        ))
-                    ) : (
-                        <Typography variant="body1" color="textSecondary">
-                            无歌词数据
+                {/* 歌词显示区域 */}
+                <Box
+                    sx={{
+                        lineHeight: lineHeight,
+                        fontSize: `${fontSize}pt`,
+                        color: color,
+                        '@media print': {
+                            color: color,
+                            fontSize: `${fontSize}pt`,
+                        },
+                    }}
+                >
+                    {/* 原始歌词 */}
+                    <Box component="div" sx={{ marginBottom: 4 }}>
+                        <Typography variant="h6" gutterBottom>
+                            歌词
                         </Typography>
-                    )}
+                        <pre
+                            style={{
+                                margin: 0,
+                                padding: 0,
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                fontFamily: 'inherit',
+                            }}
+                        >
+                            {lyrics}
+                        </pre>
+                    </Box>
+
+                    {/* 翻译或罗马音 */}
+                    <Box component="div">
+                        <Typography variant="h6" gutterBottom>
+                            {showTranslation ? '翻译' : '罗马音'}
+                        </Typography>
+                        <pre
+                            style={{
+                                margin: 0,
+                                padding: 0,
+                                whiteSpace: 'pre-wrap',
+                                wordWrap: 'break-word',
+                                fontFamily: 'inherit',
+                                color: showTranslation ? '#555' : '#333',
+                            }}
+                        >
+                            {showTranslation ? tlyrics : romalyrics}
+                        </pre>
+                    </Box>
                 </Box>
             </Paper>
         </Container>
