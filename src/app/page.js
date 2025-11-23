@@ -27,6 +27,10 @@ export default function Home() {
             title="图床"
             link="/tools/upload"
           />
+          <ToolCard
+            title="KV 数据库管理"
+            link="/tools/kv"
+          />
         </Box>
       </Container>
     </Box>
