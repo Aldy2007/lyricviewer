@@ -29,6 +29,7 @@ export default function KVManager() {
   const [kvData, setKvData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
   
   // 新增键值对的表单
   const [newKey, setNewKey] = useState('');
@@ -59,12 +60,14 @@ export default function KVManager() {
       const data = await response.json();
       if (response.ok) {
         setKvData(data.data || []);
+        setIsConnected(true);
         // 如果请求成功,说明密码正确,保存密码
         if (typeof window !== 'undefined') {
           localStorage.setItem('kvPassword', password);
         }
       } else {
         setError(data.message || '获取数据失败');
+        setIsConnected(false);
         if (typeof window !== 'undefined') {
           localStorage.removeItem('kvPassword');
         }
@@ -170,8 +173,8 @@ export default function KVManager() {
         KV 数据库管理
       </Typography>
 
-      {/* 密码输入框 - 只在没有数据时显示 */}
-      {!kvData.length && (
+      {/* 密码输入框 - 只在未连接时显示 */}
+      {!isConnected && (
         <Paper sx={{ p: 2, mb: 2 }}>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <TextField
@@ -197,11 +200,11 @@ export default function KVManager() {
         </Paper>
       )}
 
-      {loading && !kvData.length ? (
+      {loading && !isConnected ? (
         <Box display="flex" justifyContent="center" my={4}>
           <CircularProgress />
         </Box>
-      ) : kvData.length > 0 && (
+      ) : isConnected && (
         <>
           {/* 新增键值对 */}
           <Paper sx={{ p: 2, mb: 2 }}>
