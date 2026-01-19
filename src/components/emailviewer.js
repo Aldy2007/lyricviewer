@@ -173,9 +173,6 @@ export default function EmailViewer() {
         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
           To: {selectedEmail.to}
         </Typography>
-        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-          Date: {formatDate(selectedEmail.date)}
-        </Typography>
         <Divider sx={{ my: 2 }} />
         <Box 
           dangerouslySetInnerHTML={{ __html: selectedEmail.html }} 
