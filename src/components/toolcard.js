@@ -8,9 +8,9 @@ export default function ToolCard({ title, link }) {
 
   return (
     <Card sx={{ 
-      width: '100%',
+      width: { xs: '100%', sm: 240 },
       maxWidth: 300,
-      margin: '0 auto',
+      margin: 0,
       transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
       '&:hover': {
         transform: 'translateY(-4px)',

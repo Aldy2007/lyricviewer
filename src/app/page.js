@@ -13,8 +13,15 @@ export default function Home() {
       justifyContent: 'center',
       py: 4
     }}>
-      <Container maxWidth="sm">
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Container maxWidth="lg">
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'center',
+          alignItems: 'stretch',
+          gap: 2,
+          flexWrap: 'wrap'
+        }}>
           <ToolCard 
             title="歌词查看"
             link="/tools/lyrics"
